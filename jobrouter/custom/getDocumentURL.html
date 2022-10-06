@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<header>
+        <script>
+		
+const $u = (function() {
+    function getParameters() {				
+        const address = window.location.search;
+        const params = new URLSearchParams(address);
+		return params;
+    }
+
+    function requestDocumentURL(params) {			       
+        const body = JSON.stringify({
+            resultlistId: params.get('resultlistid'),
+            docId: params.get('docid')
+        });
+
+        const xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+                window.open(this.responseText, "_self");
+            }
+        });
+        
+        xhr.open("POST", window.location.origin + "/jobrouter/custom/php/ResultListURLBuilder.php");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(body);
+    }
+    
+    function execute() {
+        const params = getParameters();
+        requestDocumentURL(params)
+    }
+
+    return {
+        execute: execute
+    }
+})();
+
+$u.execute();
+			
+		</script>
+	</header>
+
+</html>
